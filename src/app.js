@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const cors = require('cors');
 const limiter = require('./utils/rateLimit');
+const globalErrorHandler = require('./utils/globalErrorHandler');
 
 const authRoute = require('./routes/authRoute');
 
@@ -34,4 +35,8 @@ app.get('/health', (req, res) => {
 
 app.use('/api/v1/users', authRoute);
 
+app.all('*', (req, res, next) => {
+  next();
+});
+app.use(globalErrorHandler);
 module.exports = app;
