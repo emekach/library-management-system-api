@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -30,7 +31,10 @@ const UserSchema = new mongoose.Schema(
       },
     },
     refreshToken: String,
-    tokenVersion: Number,
+    tokenVersion: {
+      type: Number,
+      default: 0,
+    },
     role: {
       type: String,
       enum: ['Admin', 'Librarian', 'Member'],
@@ -51,6 +55,25 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
+UserSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+UserSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    { _id: this._id, tokenVersion: this.tokenVersion },
+    process.env.JWT_ACCESS_TOKEN,
+    { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES }
+  );
+};
+
+UserSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    { _id: this._id, tokenVersion: this.tokenVersion },
+    process.env.JWT_REFRESH_TOKEN,
+    { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES }
+  );
+};
 const User = mongoose.model('User', UserSchema);
 
 module.exports = User;
