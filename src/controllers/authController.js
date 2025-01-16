@@ -83,3 +83,37 @@ exports.login = catchAsync(async (req, res, next) => {
       user: loggedInUser,
     });
 });
+
+exports.logout = catchAsync(async (req, res, next) => {
+  if (!req.user || !req.user?.id) {
+    return next(new AppError('User not found. unable to logout', 400));
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?.id,
+    {
+      $unset: {
+        refreshToken: '',
+      },
+      $inc: {
+        tokenVersion: 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+  };
+
+  return res
+    .status(200)
+    .clearCookie('accessToken', options)
+    .clearCookie('refreshToken', options)
+    .json({
+      message: 'User Logged out sucessfully',
+    });
+});
