@@ -1,6 +1,7 @@
 const AppError = require('./../utils/AppError');
 const catchAsync = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
+const generateAccessAndRefreshToken = require('./../utils/generateToken');
 
 exports.createUser = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm } = req.body;
@@ -29,4 +30,56 @@ exports.createUser = catchAsync(async (req, res, next) => {
       user: createdUser,
     },
   });
+});
+
+exports.login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new AppError('Field cannot be empty', 400));
+  }
+
+  // check if email exist
+
+  const user = await User.findOne({ email });
+
+  if (!user || !(await user.isPasswordCorrect(password))) {
+    return next(new AppError('Invalid Credentials', 400));
+  }
+
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user?._id
+  );
+
+  const loggedInUser = await User.findById(user?._id).select(
+    '-password -tokenVersion -refreshToken'
+  );
+
+  if (!loggedInUser) {
+    return next(new AppError('Failed to log in user', 404));
+  }
+
+  const options = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+  };
+
+  JWT_COOKIE_EXPIRES_IN = 15;
+  JWT_COOKIE_EXPIRES_IN = 15;
+  return res
+    .status(200)
+    .cookie('accessToken', accessToken, {
+      ...options,
+      maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 60 * 1000,
+    })
+    .cookie('refreshToken', refreshToken, {
+      ...options,
+      maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+    })
+    .json({
+      status: 'success',
+      accessToken,
+      refreshToken,
+      user: loggedInUser,
+    });
 });
