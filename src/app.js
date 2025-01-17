@@ -7,6 +7,7 @@ const limiter = require('./utils/rateLimit');
 const globalErrorHandler = require('./utils/globalErrorHandler');
 
 const authRoute = require('./routes/authRoute');
+const bookRoute = require('./routes/bookRoute');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.get('/health', (req, res) => {
 // routes
 
 app.use('/api/v1/users', authRoute);
+app.use('/api/v1/books', bookRoute);
 
 app.all('*', (req, res, next) => {
   next();

@@ -6,6 +6,7 @@ const bookSchema = new mongoose.Schema({
     required: [true, 'A book must have ISBN'],
     unique: true,
   },
+  publishedDate: Date,
   status: {
     type: String,
     enum: ['Available', 'Borrowed'],
