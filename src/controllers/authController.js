@@ -117,3 +117,4 @@ exports.logout = catchAsync(async (req, res, next) => {
       message: 'User Logged out sucessfully',
     });
 });
+
