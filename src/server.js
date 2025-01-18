@@ -2,7 +2,7 @@ const connectDB = require('./config/connectDB');
 const mongoose = require('mongoose');
 
 process.on('uncaughtException', (err, origin) => {
-  console.log('UncaughtException: ', err.message);
+  console.log('UncaughtException: ', err);
   console.log(`Exception origin: ${origin}`);
   process.exit(1);
 });

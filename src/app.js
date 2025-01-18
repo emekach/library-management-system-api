@@ -8,6 +8,7 @@ const globalErrorHandler = require('./utils/globalErrorHandler');
 
 const authRoute = require('./routes/authRoute');
 const bookRoute = require('./routes/bookRoute');
+const authorRoute = require('./routes/authorRoute');
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.get('/health', (req, res) => {
 
 app.use('/api/v1/users', authRoute);
 app.use('/api/v1/books', bookRoute);
+app.use('/api/v1/authors', authorRoute);
 
 app.all('*', (req, res, next) => {
   next();

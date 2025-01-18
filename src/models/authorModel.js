@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { isDate } = require('date-fns');
 
 const authorSchema = new mongoose.Schema(
   {
@@ -10,7 +11,15 @@ const authorSchema = new mongoose.Schema(
     bio: {
       type: String,
     },
-    birthDate: Date,
+    birthDate: {
+      type: Date,
+      validate: {
+        validator: function (value) {
+          return isDate(new Date(value));
+        },
+        message: 'Invalid date',
+      },
+    },
   },
   {
     timestamps: true,
