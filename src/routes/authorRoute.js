@@ -10,5 +10,7 @@ router
     authMiddleware.protect,
     authMiddleware.restrictTo('Admin', 'Librarian'),
     authController.createAuthor
-  );
+  )
+  .get(authMiddleware.protect, authController.getAllAuthor);
+
 module.exports = router;

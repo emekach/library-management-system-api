@@ -24,3 +24,9 @@ exports.createBook = catchAsync(async (req, res, next) => {
     book,
   });
 });
+
+exports.getBooks = catchAsync(async (req, res, next) => {
+  const book = await Books.find();
+
+//   if(!book)
+});

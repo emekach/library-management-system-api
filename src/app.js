@@ -28,6 +28,10 @@ app.use(limiter);
 
 app.use(express.json({ limit: '15kb' }));
 app.use(express.urlencoded({ extended: true, limit: '15kb' }));
+app.use((req, res, next) => {
+  console.log(req.body); // Inspect the body of the request
+  next();
+});
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'UP' });

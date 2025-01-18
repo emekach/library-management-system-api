@@ -26,7 +26,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   try {
     decoded = await promisify(jwt.verify)(token, process.env.JWT_ACCESS_TOKEN);
-    console.log('Decoded:', decoded);
+    // console.log('Decoded:', decoded);
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return next(new AppError('Token has expired', 401));
@@ -45,15 +45,15 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded._id).select(
     '-password -refreshToken'
   );
-  console.log('Current User:', currentUser);
+  //   console.log('Current User:', currentUser);
 
   if (!currentUser) {
     return next(new AppError('User not found', 404));
   }
 
   // Compare the token version with the one in the database
-  console.log('Decoded token version:', decoded.tokenVersion);
-  console.log('Current user token version:', currentUser.tokenVersion);
+  //   console.log('Decoded token version:', decoded.tokenVersion);
+  //   console.log('Current user token version:', currentUser.tokenVersion);
 
   if (decoded.tokenVersion !== currentUser.tokenVersion) {
     return next(new AppError('Unauthorized access', 401));
@@ -61,7 +61,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   req.user = currentUser;
 
-  console.log(req.user);
+  //   console.log(req.user);
 
   next();
 });

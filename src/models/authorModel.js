@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { isDate } = require('date-fns');
+const { isValid } = require('date-fns');
 
 const authorSchema = new mongoose.Schema(
   {
@@ -15,7 +15,7 @@ const authorSchema = new mongoose.Schema(
       type: Date,
       validate: {
         validator: function (value) {
-          return isDate(new Date(value));
+          return isValid(new Date(value));
         },
         message: 'Invalid date',
       },
