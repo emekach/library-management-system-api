@@ -13,4 +13,8 @@ router
   )
   .get(authMiddleware.protect, authController.getAllAuthor);
 
+router
+  .route('/:authorId')
+  .get(authMiddleware.protect, authController.getAuthor);
+
 module.exports = router;

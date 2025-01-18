@@ -54,3 +54,21 @@ exports.getAllAuthor = catchAsync(async (req, res, next) => {
     author,
   });
 });
+
+exports.getAuthor = catchAsync(async (req, res, next) => {
+  const { authorId } = req.params;
+
+  //   console.log(req.params);
+
+  const author = await Author.findById(authorId);
+  if (!author) {
+    return next(new AppError('author not found', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    author,
+  });
+
+  next();
+});
