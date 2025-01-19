@@ -72,3 +72,34 @@ exports.getAuthor = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+exports.updateAuthor = catchAsync(async (req, res, next) => {
+  const { authoId } = req.params;
+
+  const author = await Author.findByIdAndUpdate(authorId, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!author) {
+    return next(new AppError('No author found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    author,
+  });
+});
+
+exports.deleteAuthor = catchAsync(async (req, res, next) => {
+  const { authorId } = req.params;
+
+  const author = await Author.findByIdAndDelete(authorId);
+  if (!author) {
+    return next(new AppError('No author found with that id', 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    data: null,
+  });
+});

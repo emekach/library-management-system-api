@@ -15,6 +15,16 @@ router
 
 router
   .route('/:authorId')
-  .get(authMiddleware.protect, authController.getAuthor);
+  .get(authMiddleware.protect, authController.getAuthor)
+  .patch(
+    authMiddleware.protect,
+    authMiddleware.restrictTo('Admin', 'Librarian'),
+    authController.updateAuthor
+  )
+  .delete(
+    authMiddleware.protect,
+    authMiddleware.restrictTo('Admin', 'Librarian'),
+    authController.deleteAuthor
+  );
 
 module.exports = router;
