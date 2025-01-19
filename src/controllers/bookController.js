@@ -28,5 +28,12 @@ exports.createBook = catchAsync(async (req, res, next) => {
 exports.getBooks = catchAsync(async (req, res, next) => {
   const book = await Books.find();
 
-//   if(!book)
+  if (!book) {
+    return next(new AppError('No book found', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    book,
+  });
 });

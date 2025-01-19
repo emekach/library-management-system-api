@@ -74,7 +74,7 @@ exports.getAuthor = catchAsync(async (req, res, next) => {
 });
 
 exports.updateAuthor = catchAsync(async (req, res, next) => {
-  const { authoId } = req.params;
+  const { authorId } = req.params;
 
   const author = await Author.findByIdAndUpdate(authorId, req.body, {
     new: true,
