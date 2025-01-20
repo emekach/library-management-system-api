@@ -21,6 +21,11 @@ router
     authMiddleware.protect,
     authMiddleware.restrictTo('Admin', 'Librarian'),
     bookController.updateBook
+  )
+  .delete(
+    authMiddleware.protect,
+    authMiddleware.restrictTo('Admin'),
+    bookController.deleteBook
   );
 
 module.exports = router;

@@ -87,3 +87,18 @@ exports.updateBook = catchAsync(async (req, res, next) => {
     book,
   });
 });
+
+exports.deleteBook = catchAsync(async (req, res, next) => {
+  const { bookId } = req.params;
+
+  const book = await Books.findByIdAndDelete(bookId);
+
+  if (!book) {
+    return next(new AppError('No book found with that id', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    book: null,
+  });
+});
