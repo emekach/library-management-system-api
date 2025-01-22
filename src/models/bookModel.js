@@ -9,7 +9,7 @@ const bookSchema = new mongoose.Schema({
   publishedDate: Date,
   status: {
     type: String,
-    enum: ['Available', 'Borrowed'],
+    enum: ['Available', 'Bofrrowed'],
     default: 'Available',
     required: [true, 'A book must have a status'],
   },
