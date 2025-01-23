@@ -1,5 +1,6 @@
 const express = require('express');
 const borrowController = require('./../controllers/borrowController');
+const authMiddleware = require('./../middlewares/auth');
 const router = express.Router({ mergeParams: true });
 
 router
@@ -25,4 +26,4 @@ router
     authMiddleware.restrictTo('Admin', 'Librarian'),
     borrowController.borrowRecords
   );
-module.exports = reouter;
+module.exports = router;

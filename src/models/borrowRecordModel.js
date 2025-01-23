@@ -22,5 +22,5 @@ const borrowedRecordSchema = new mongoose.Schema({
   },
 });
 
-const borrowedRecord = mongoose.model('BorrowedRecord', borrowedRecord);
+const borrowedRecord = mongoose.model('BorrowedRecord', borrowedRecordSchema);
 module.exports = borrowedRecord;
