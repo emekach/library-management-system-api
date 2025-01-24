@@ -3,7 +3,6 @@ const Book = require('./../models/bookModel');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/AppError');
-const borrowedRecord = require('./../models/borrowRecordModel');
 
 exports.borrowBook = catchAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -79,4 +78,15 @@ exports.returnBook = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.borrowRecords = catchAsync(async (req, res, next) => {});
+exports.borrowRecords = catchAsync(async (req, res, next) => {
+  const booksBorrowed = await BorrowRecord.find();
+
+  if (!booksBorrowed) {
+    return next(new AppError('No borrowed Books found', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    booksBorrowed,
+  });
+});

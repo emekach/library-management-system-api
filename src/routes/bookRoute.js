@@ -7,6 +7,7 @@ const borrowRouter = require('./borrowRoute');
 const router = express.Router();
 
 router.use('/:id', borrowRouter);
+router.use('/', borrowRouter);
 
 router
   .route('/')
